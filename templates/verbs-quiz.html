@@ -1,0 +1,284 @@
+{% extends "user-layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main%}
+
+<div id="overlay" class="overlay"></div> <!-- add hide class to hide overlay-->
+ <div class="quiz-app-container">
+    <div style="width: 85%">
+
+        <!-- Modal -->
+        <div class="quiz-modal" id="quit-modal" tabindex="-1" role="dialog" aria-labelledby="quit-modal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Quiz</h5>
+                </div>
+                <div class="modal-body">
+                Are you sure you want to quit?
+                </div>
+                <div class="modal-footer">
+                <button id="close-modal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href = '/'">Quit</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- end modal -->
+
+                <button id="quit-quiz" type="button" class="btn btn-danger" style="float: right;">X</button>
+                <h3 class="text-white pb-3">Verbs Quiz</h3>
+                <!-- 7 questions - progress bar -->
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <!-- Quiz question -->
+            </div>
+            <h4 class="text-white">Choose the correct translation</h4>
+            <!-- Output -->
+            <div id="output-div">
+                <!-- <div class="answer"></div>
+                <div class="answer"></div>
+                <div class="answer"></div> -->
+            </div>
+            <!-- Next Buttons-->
+            <div class="row-submit">
+                <h5 class="text-white">Question <span id="q-number"></span> of <span id="total-q"></span></h5>
+                <button id="next-btn" class="btn btn-primary btn-next" disabled>Next</button>
+            </div>
+        </div>
+
+    <script>
+
+        window.onload=function(){
+            // Fetch data
+            const data = {{ data | tojson }}
+            const outputDiv = document.getElementById('output-div')
+            // console.log('official data - ', data)
+
+            const answersArr = []
+            const quizQuestions = []
+
+            // loop through data and create array of translations
+            data.forEach(item => {
+                    answersArr.push(item.eng_verb_name)
+            })
+
+            let numOfQuestions = 0
+
+            if (data.length < 5){
+                numOfQuestions = data.length
+            } else {
+                numOfQuestions = 5
+            }
+
+            console.log('num of questions - ', numOfQuestions)
+
+            // loop through data and push 5 random objects to questions array
+             for (n = 0; n < numOfQuestions; n++){
+                // get random num
+                let i = Math.floor(Math.random() * data.length)
+                // check if quizQuestions already has this object
+                while (quizQuestions.includes(data[i])){
+                    i = Math.floor(Math.random() * data.length)
+                }
+                quizQuestions.push(data[i])
+            }
+
+            console.log('quiz questions -- ', quizQuestions)
+            // console.log('possible answers -- ', answersArr)
+
+            // Constants
+            const progressBar = document.getElementById('progress-bar')
+            const nextBtn = document.getElementById('next-btn')
+            const questionNumber = document.getElementById('q-number')
+            const totalQuestions = document.getElementById('total-q')
+            let questionIndex = 0;
+            let correctCount = 0
+            let incorrectCount = 0;
+
+            function startQuiz() {
+             // Display question function
+             function displayQuestion(){
+                nextBtn.disabled = true
+                // update progress bar
+                if (questionIndex == 0){
+                    progressBar.style.width = "0%"
+                    console.log(progressBar.style.width)
+                } else {
+                    progressBar.style.width = `${(questionIndex / quizQuestions.length) * 100}%`
+                    console.log(progressBar.style.width)
+                }
+                // Update question and total numbers
+                questionNumber.innerText = questionIndex + 1
+                totalQuestions.innerText = quizQuestions.length
+
+                // Update next button
+                if (questionIndex == quizQuestions.length - 1){
+                    nextBtn.innerText = "Finish"
+                }
+
+
+                // loop 3 times and push random answers to potentialAnswers array
+                let potentialAnswers = []
+                if (data.length < 3){
+                    potentialAnswers = ["To Fantasize", quizQuestions[questionIndex].eng_verb_name, "To Speculate"]
+                } else {
+                for (n = 0; n < 3; n++){
+                    if (n == 0){
+                        //  push the correct answer first
+                        potentialAnswers.push(
+                            quizQuestions[questionIndex].eng_verb_name
+                        )
+                        } else {
+
+                        // get random num
+                        let i = Math.floor(Math.random() * answersArr.length)
+
+                        // check if potentialAnswers already has the next answers
+                        while (potentialAnswers.includes(answersArr[i])){
+                            i = Math.floor(Math.random() * data.length)
+                        }
+                        potentialAnswers.push(
+                            answersArr[i]
+                            )
+                        }
+                    }
+                }
+
+                // Shuffle potential Answers
+                shuffle(potentialAnswers)
+
+                // OUTPUT TO DOM -----
+                let output =    `<h1 class="text-white text-center mb-5">${quizQuestions[questionIndex].translation}</h1>
+                             <div id="row-answers" class="row-answers">
+                                <div class="answer">${potentialAnswers[0]}</div>
+                                <div class="answer">${potentialAnswers[1]}</div>
+                                <div class="answer">${potentialAnswers[2]}</div>
+                            </div>
+                            `
+                outputDiv.innerHTML = output;
+            }
+
+            function checkResults(e){
+                // Check results
+                const correct = quizQuestions[questionIndex].eng_verb_name
+                const selected = e.target.innerText
+
+                answers.forEach(answer => {
+                    // change background colors
+                        let currentAnswer = answer.innerText
+
+                        if (currentAnswer === selected && currentAnswer !== correct){
+                            answer.classList.add('bg-danger')
+                        } else if (currentAnswer === selected && currentAnswer === correct){
+                            answer.classList.add('bg-success')
+                        } else {
+                            console.log('error')
+                        }
+
+                        if (currentAnswer !== selected && currentAnswer !== correct){
+                            answer.classList.add('clicked')
+                        } else if (currentAnswer !== selected && currentAnswer === correct){
+                            answer.classList.add('bg-success')
+                        } else {
+                            console.log('error')
+                        }
+
+                    answer.removeEventListener('click', checkResults)
+                })
+
+                // Update counts and variables
+                // correct / incorrect count
+                if (correct == selected){
+                    correctCount++
+                    } else {
+                    incorrectCount++
+                }
+
+                nextBtn.disabled = false
+                questionIndex++
+
+            }
+
+             // CALL FUNCTIONS
+             displayQuestion(questionIndex)
+
+            // EVENT LISTENERS
+            let answers = document.querySelectorAll('.answer')
+                answers.forEach((answer, index) => {
+                    answer.addEventListener('click', checkResults)
+            })
+
+            // Shuffle array function
+            function shuffle(array) {
+             let currentIndex = array.length,  randomIndex;
+
+            // While there remain elements to shuffle.
+            while (currentIndex != 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+            }
+
+        }
+            // ----- end quiz func
+
+            startQuiz()
+
+
+            nextBtn.addEventListener('click', function(){
+                // When finished
+                if (questionIndex == quizQuestions.length){
+                    modalBody = document.querySelector('.modal-body')
+
+                    modalBody.innerHTML = ` <h4>Finished!</h4>
+                                            <h4>You scored ${correctCount} out of ${quizQuestions.length}</h4>
+                                            `
+                    closeModalButton.innerText = "Play again"
+                    closeModalButton.addEventListener('click', function(){
+                        window.location.href = '/verbs-quiz'
+                    })
+                    overlay.classList.add('show')
+                    quitModal.classList.add('show')
+                } else {
+                    // Restart Quiz
+                    startQuiz()
+                }
+            })
+
+            // MODAL FUNCTIONALITY
+            const overlay = document.getElementById('overlay') // Overlay div
+            const quitModal = document.getElementById('quit-modal') // Quit modal
+
+            const mainQuitButton = document.getElementById('quit-quiz') // Quit button
+            const closeModalButton = document.getElementById('close-modal') // Close modal button
+            // X button onclick (quit quiz)
+            mainQuitButton.addEventListener('click', function(){
+                //   insert quit modal here
+                overlay.classList.add('show')
+                quitModal.classList.add('show')
+            })
+            // close modal (cancel and continue quiz)
+            closeModalButton.addEventListener('click', function(){
+                overlay.classList.remove('show')
+                quitModal.classList.remove('show')
+            })
+
+        }
+
+    </script>
+
+
+{% endblock %}

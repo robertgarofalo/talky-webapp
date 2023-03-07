@@ -1,0 +1,241 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% macro display_conjugation_input_fields(verb_tense, verb_tense_title) -%}
+<table class="conjugated-table">
+    <h5>{{ verb_tense_title }}</h5>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if results %}
+            {% for item in results %}
+                {% if item[verb_tense] == None %}
+                    <tr class="edit-conjugations-row">
+                        <td><input class="edit-conjugations-input form-control" type="text" name="{{ verb_tense }}_{{loop.index}}" value="" placeholder="Add"> </td>
+                    </tr>
+                {% else %}
+                    <tr class="edit-conjugations-row">
+                        <td><input class="edit-conjugations-input form-control"  type="text" name="{{ verb_tense }}_{{loop.index}}" value="{{ item[verb_tense] }}" placeholder="Add"></td>
+                    </tr>
+                {% endif %}
+            {% endfor%}
+        {% else %}
+            {% for n in range(6) %}
+                <tr class="edit-conjugations-row">
+                    <td><input class="edit-conjugations-input form-control"  type="text" name="{{ verb_tense }}_{{n + 1}}" value="" placeholder="Add"> </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+{%- endmacro %}
+
+{% block main%}
+<!-- <form action="{{ url_for('edit_conjugations', translation=verb_details[0].infinitive_verb) }}" method="post"> -->
+<form action="{{ url_for('edit_conjugations', translation=verb_details[0].infinitive_verb) }}" method="post">
+<div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex justify-content-center align-items-center">
+            <h2 class="mx-1 mb-3">{{ verb_details[0].infinitive_verb }} - {{ verb_details[0].eng_verb_name }}</h2>
+        </div>
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            <a href="/verb-conjugated/{{ verb_details[0].infinitive_verb }}" class="btn btn-danger mx-1">Cancel</a>
+                    <!-- <input type="hidden" name="_method" value="UPDATE"> -->
+                    <input type="submit" value="Update" class="btn btn-success mx-1">
+        </div>
+    </div>
+
+    <!-- Complete Table -->
+
+    <h4 class="mt-2">Indicative</h4>
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+        <div>
+            {{ display_conjugation_input_fields("indicative_presente", "Presente" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("indicative_imperfetto", "Imperfetto" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("indicative_passato_remoto", "Passato Remoto" ) }}
+        </div>
+    </div>
+    <!-- End Table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4" style="min-width: 50%;">
+        <div>
+            {{ display_conjugation_input_fields("indicative_futuro_semplice", "Futuro Semplice" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("indicative_passato_prossimo", "Passato Prossimo" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("indicative_trapassato_prossimo", "Trapassato Prossimo" ) }}
+        </div>
+    </div>
+    <!-- End table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-4" style="min-width: 50%;">
+        <div>
+            {{ display_conjugation_input_fields("indicative_trapassato_remoto", "Trapassato Remoto" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("indicative_futuro_anteriore", "Futuro Anteriore" ) }}
+        </div>
+    </div>
+    <!-- End table row -->
+
+    <!-- Complete Table -->
+    <h4 class="mt-3">Congiuntivo</h4>
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-2" style="min-width: 50%;">
+        <div>
+            {{ display_conjugation_input_fields("congiuntivo_presente", "Presente" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("congiuntivo_passato", "Passato" ) }}
+        </div>
+    </div>
+    <!-- End Table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-3" style="min-width: 50%;">
+        <div>
+            {{ display_conjugation_input_fields("congiuntivo_imperfetto", "Imperfetto" ) }}
+        </div>
+
+        <div>
+            {{ display_conjugation_input_fields("congiuntivo_trapassato", "Trapassato" ) }}
+        </div>
+    </div>
+    <!-- End Table row -->
+    <!-- Complete Table -->
+    <div class="d-flex justify-content-around align-items-center mb-4 mt-4" style="min-width: 50%;">
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+
+        <div class="d-flex flex-column">
+            <h4 class="mt-2">Condizionale</h4>
+            <div class="d-flex">
+                <div>
+                    {{ display_conjugation_input_fields("condizionale_presente", "Presente" ) }}
+                </div>
+                <div>
+                    {{ display_conjugation_input_fields("condizionale_passato", "Passato" ) }}
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 class="mt-2">Imperative</h4>
+            {{ display_conjugation_input_fields("imperative_presente", "Presente" ) }}
+        </div>
+    </div>
+</div>
+    <!-- End Table row -->
+
+    <!-- Complete Table -->
+    <div class="d-flex justify-content-around align-items-center mb-4 mt-4" style="min-width: 50%;">
+
+        <!-- Table row -->
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+
+            <div class="d-flex flex-column">
+                <h4 class="mt-2">Gerundio</h4>
+                <div class="d-flex">
+                    <div>
+                        <table class="conjugated-table">
+                            <h5>Presente</h5>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if results %}
+                                    {% if results[0].gerundio_presente == None %}
+                                        <tr class="edit-conjugations-row">
+                                            <td><input class="edit-conjugations-input form-control" type="text" name="gerundio_presente_1" value="" placeholder="Add"> </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr class="edit-conjugations-row">
+                                            <td><input class="edit-conjugations-input form-control"  type="text" name="gerundio_presente_1" value="{{ results[0].gerundio_presente }}" placeholder="Add"></td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr class="edit-conjugations-row">
+                                        <td><input class="edit-conjugations-input form-control"  type="text" name="gerundio_presente_1" value="" placeholder="Add"> </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table class="conjugated-table">
+                            <h5>Passato</h5>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if results %}
+                                    {% if results[0].gerundio_passato == None %}
+                                        <tr class="edit-conjugations-row">
+                                            <td><input class="edit-conjugations-input form-control" type="text" name="gerundio_passato_1" value="" placeholder="Add"> </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr class="edit-conjugations-row">
+                                            <td><input class="edit-conjugations-input form-control"  type="text" name="gerundio_passato_1" value="{{ results[0].gerundio_passato }}" placeholder="Add"></td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr class="edit-conjugations-row">
+                                        <td><input class="edit-conjugations-input form-control"  type="text" name="gerundio_passato_1" value="" placeholder="Add"> </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="mt-2">Infinito</h4>
+                <table class="conjugated-table">
+                    <h5>Presente</h5>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ verb_details[0].infinitive_verb }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!-- End Table row -->
+<!-- End Complete Table -->
+</form>
+
+    {% endblock %}

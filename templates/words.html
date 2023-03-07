@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main%}
+<div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div></div>
+        <h2 class="pb-3">Words</h2>
+        <a class="btn btn-success mx-3 mb-4 py-1 px-" href="/add-word">Add new</a>
+    </div>
+    <div>
+        <form class="d-flex flex-row py-auto mb-4" method="POST" action="/words">
+            <select class='form-select mx-auto w-auto' name="category-name" id="category-name" required>
+                <option disabled label="Select Category Name" value=""></option>
+                <option {{ "selected='selected'" if selected == "All" else "" }}value="All">All</option>
+                {% for item in categories %}
+                <option {{ "selected='selected'" if selected == item.category_name else "" }} value="{{ item.category_name }}">{{ item.category_name}}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary mx-1" type="submit">Select</button>
+        </form>
+    </div>
+
+    <table class="table-class">
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" onClick="toggle(this)"></th> -->
+                <th>Created</th>
+                <th>Category Name</th>
+                <th>Word</th>
+                <th>Translation</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in words %}
+            <tr>
+                <td>{{word.date}}</td>
+                <td>{{word.category_name}}</td>
+                <td>{{word.word}}</td>
+                <td>{{word.translation}}</td>
+                <td class="d-flex flex-row align-items-center justify-content-center">
+                    <a href="/edit-word/{{ word.id }}" class="btn btn-secondary mx-1">Edit</a>
+                    <form action="{{url_for('delete_word', id=word.id)}}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-danger mx-1">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+<!-- Jinja Macro -->
+{% macro display_table(verb_tense, verb_tense_title) -%}
+<table class="conjugated-table">
+    <h5>{{ verb_tense_title }}</h5>
+<thead>
+    <tr>
+        <th></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% if results %}
+        {% for item in results %}
+            {% if item[verb_tense] == None or not item[verb_tense] %}
+                <tr>
+                    <td> - </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ item[verb_tense] }}</td>
+                </tr>
+            {% endif %}
+        {% endfor%}
+    {% else %}
+        {% for n in range(6) %}
+            <tr>
+                <td> - </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</tbody>
+</table>
+{%- endmacro %}
+<!-- end macro -->
+
+{% block main%}
+<div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex justify-content-center align-items-center">
+            <h2 class="mx-1 mb-3">{{ verb_details[0].infinitive_verb }} - {{ verb_details[0].eng_verb_name }}</h2>
+        </div>
+        <div class="d-flex align-items-center justify-content-center mb-4">
+            <a href="/verbs" class="btn btn-danger mx-1">Back</a>
+            <a href="/edit-conjugations/{{ verb_details[0].infinitive_verb }}" class="btn btn-secondary mx-1">Edit Conjugations</a>
+        </div>
+    </div>
+
+
+    <!-- Complete Table -->
+    <h4 class="mt-2">Indicative</h4>
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+        <div>
+            {{ display_table("indicative_presente", "Presente") }}
+        </div>
+
+        <div>
+            {{ display_table("indicative_imperfetto", "Imperfetto") }}
+        </div>
+
+        <div>
+            {{ display_table("indicative_passato_remoto", "Passato Remoto") }}
+        </div>
+    </div>
+    <!-- End Table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4" style="min-width: 50%;">
+        <div>
+            {{ display_table("indicative_futuro_semplice", "Futuro Semplice") }}
+        </div>
+
+        <div>
+            {{ display_table("indicative_passato_prossimo", "Passato Prossimo") }}
+        </div>
+
+        <div>
+            {{ display_table("indicative_trapassato_prossimo", "Trapassato Prossimo") }}
+        </div>
+    </div>
+    <!-- End table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-4" style="min-width: 50%;">
+        <div>
+            {{ display_table("indicative_trapassato_remoto", "Trapassato Remoto") }}
+        </div>
+
+        <div>
+            {{ display_table("indicative_futuro_anteriore", "Futuro Anteriore") }}
+        </div>
+    </div>
+    <!-- End table row -->
+
+    <!-- Complete Table -->
+    <h4 class="mt-3">Congiuntivo</h4>
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-2" style="min-width: 50%;">
+        <div>
+            {{ display_table("congiuntivo_presente", "Presente") }}
+        </div>
+
+        <div>
+            {{ display_table("congiuntivo_passato", "Passato") }}
+        </div>
+    </div>
+    <!-- End Table row -->
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-center align-items-center mb-4 mt-3" style="min-width: 50%;">
+        <div>
+            {{ display_table("congiuntivo_imperfetto", "Imperfetto") }}
+        </div>
+
+        <div>
+            {{ display_table("congiuntivo_trapassato", "Trapassato") }}
+        </div>
+    </div>
+    <!-- End Table row -->
+    <!-- Complete Table -->
+    <div class="d-flex justify-content-around align-items-center mb-4 mt-4" style="min-width: 50%;">
+
+    <!-- Table row -->
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+
+        <div class="d-flex flex-column">
+            <h4 class="mt-2">Condizionale</h4>
+            <div class="d-flex">
+                <div>
+                    {{ display_table("condizionale_presente", "Presente") }}
+                </div>
+                <div>
+                    {{ display_table("condizionale_passato", "Passato") }}
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 class="mt-2">Imperative</h4>
+            {{ display_table("imperative_presente", "Presente") }}
+        </div>
+    </div>
+</div>
+    <!-- End Table row -->
+
+    <!-- Complete Table -->
+    <div class="d-flex justify-content-around align-items-center mb-4 mt-4" style="min-width: 50%;">
+
+        <!-- Table row -->
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-3" style="min-width: 50%;">
+
+            <div class="d-flex flex-column">
+                <h4 class="mt-2">Gerundio</h4>
+                <div class="d-flex">
+                    <div>
+                        <table class="conjugated-table">
+                            <h5>Presente</h5>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if results %}
+                                        {% if results[0].gerundio_presente == None or not results[0].gerundio_presente%}
+                                            <tr>
+                                                <td> - </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td>{{ results[0].gerundio_presente }}</td>
+                                            </tr>
+                                        {% endif %}
+
+                                {% else %}
+                                        <tr>
+                                            <td> - </td>
+                                        </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table class="conjugated-table">
+                            <h5>Passato</h5>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if results %}
+                                        {% if results[0].gerundio_passato == None or not results[0].gerundio_passato %}
+                                            <tr>
+                                                <td> - </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td>{{ results[0].gerundio_passato }}</td>
+                                            </tr>
+                                        {% endif %}
+
+                                {% else %}
+                                        <tr>
+                                            <td> - </td>
+                                        </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="mt-2">Infinito</h4>
+                <table class="conjugated-table">
+                    <h5>Presente</h5>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ verb_details[0].infinitive_verb }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End Table row -->
+
+
+    {% endblock %}

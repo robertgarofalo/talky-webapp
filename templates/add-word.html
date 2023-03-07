@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Word
+{% endblock %}
+
+{% block main%}
+    <h1>Add Word</h1>
+    <form class="d-flex flex-column align-items-center" action="/add-word" method="post">
+        <div class="m-2">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="word-name" name="word-name" placeholder="Add word" type="text">
+        </div>
+        <div class="m-2">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="word-translation" name="word-translation" placeholder="Add translation" type="text">
+        </div>
+        <select class='form-select mx-auto w-auto mt-2 mb-4' name="category-name" id="category-name" required>
+            <option label="Select Category Name" value=""></option>
+            {% for item in categories %}
+            <option value="{{item.category_name}}">{{ item.category_name }}</option>
+            {% endfor %}
+        </select>
+        <div class="d-flex">
+            <a href="/words" class="btn btn-danger mx-1">Cancel</a>
+            <button class="btn btn-success mx-1" type="submit">Add Word</button>
+        </div>
+    </form>
+
+{% endblock %}

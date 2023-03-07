@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit Word
+{% endblock %}
+
+{% block main%}
+    <h1>Edit Word</h1>
+    <form class="d-flex flex-column align-items-center" action="" method="post">
+        <div class="m-2">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="word" name="word" placeholder="Edit word" type="text" value="{{ result[0].word }}">
+            </input>
+        </div>
+        <div class="m-2">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="translation" name="translation" placeholder="Edit translation" type="text" value="{{ result[0].translation }}">
+            </input>
+        </div>
+        <select class='form-select mx-auto w-auto mt-2 mb-4' name="category-name" id="category-name" required>
+            <option label="Select Category Name" value=""></option>
+            {% for item in categories %}
+            <option {{ "selected='selected'" if result[0].category_name == item.category_name else "" }} value="{{item.category_name}}">{{ item.category_name }}</option>
+            {% endfor %}
+        </select>
+        <div class="d-flex">
+            <a href="/words" class="btn btn-danger mx-1">Cancel</a>
+            <button class="btn btn-success mx-1" type="submit">Update</button>
+        </div>
+    </form>
+
+{% endblock %}

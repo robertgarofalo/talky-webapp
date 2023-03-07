@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main%}
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div></div>
+        <h2 class="pb-3">Categories</h2>
+        <a class="btn btn-success mx-3 mb-4 py-1 px-" href="/add-category">Add new</a>
+    </div>
+    <div>
+        <form class="d-flex flex-row mb-4" style="width: 350px;" method="POST" action="/categories">
+            <select class='form-select mx-3' name="category-type" id="category-type">
+                <option {{ "selected='selected'" if category_type == 'All' else "" }} value="All">All</option>
+                <option {{ "selected='selected'" if category_type == 'Words' else "" }} value="Words">Words</option>
+                <option {{ "selected='selected'" if category_type == 'Phrases' else "" }} value="Phrases">Phrases</option>
+            </select>
+            <button class="btn btn-primary" style="width: 200px;" type="submit">Select Type</button>
+        </form>
+    </div>
+
+    <table class="table-class">
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" onClick="toggle(this)"></th> -->
+                <th>Created</th>
+                <th>Category Type</th>
+                <th>Category Name</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <!-- <td><input type="checkbox" name="category_select" id="{{ category.id }}" value={{ category.category_name }}></td> -->
+                <td>{{category.date}}</td>
+                <td>{{category.category_type}}</td>
+                <td>{{category.category_name}}</td>
+                <td class="d-flex flex-row align-items-center justify-content-center">
+                    <a href="/edit-category/{{ category.id }}" class="btn btn-secondary mx-1">Edit</a>
+                    <form action="{{url_for('delete_category', id=category.id)}}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-danger mx-1">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </div>
+
+{% endblock %}

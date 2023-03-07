@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% macro display_card(title, num, btn, link) -%}
+    <div class="col-sm-4 column">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">{{ title }}</h5>
+            <p class="card-text number">{{ num }}</p>
+            <a href={{ link }} class="btn btn-outline-secondary">{{ btn }}</a>
+            </div>
+        </div>
+    </div>
+{%- endmacro %}
+
+{% block main%}
+<!-- Total users, total categories, total words, total phrases, total infinite verbs,  verbconjugations -->
+    <h1>Welcome {{ username }}</h1>
+    <div class="row-container mt-5">
+        <div class="row">
+            {{ display_card("Total Users", totals[0]["total_users"] , "See Users", "/users") }}
+            <!-- end card -->
+            {{ display_card("Total Categories", totals[0]["total_categories"], "See Categories", "/categories") }}
+            <!-- end card -->
+            {{ display_card("Total Words", totals[0]["total_words"], "See Words", "/words") }}
+            <!-- end card -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end row container -->
+
+    <div class="row-container mt-5">
+        <div class="row">
+            {{ display_card("Total Phrases", totals[0]["total_phrases"], "See Phrases", "/phrases") }}
+            <!-- end card -->
+            {{ display_card("Total Verbs", totals[0]["total_verbs"], "See Verbs", "/verbs") }}
+            <!-- end card -->
+            {{ display_card("Total Conjugations", totals[0]["total_conjugated_verbs"], "See Verbs", "/verbs") }}
+            <!-- end card -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end row container -->
+    </table>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main%}
+    <h1>Add Category</h1>
+    <form class="d-flex flex-column align-items-center" action="/add-category" method="post">
+        <div class="m-4">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="category-name" name="category-name" placeholder="Category name" type="text">
+        </div>
+        <select class='form-select mx-auto w-auto mb-4' name="category-type" id="category-type" required>
+            <option label="Select Category Type" value=""></option>
+            <option value="Words">Words</option>
+            <option value="Phrases">Phrases</option>
+        </select>
+        <div class="d-flex">
+            <a href="/categories" class="btn btn-danger mx-1">Cancel</a>
+            <button class="btn btn-success mx-1" type="submit">Add Category</button>
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main%}
+<div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div></div>
+        <h2 class="pb-3">Verbs</h2>
+        <a class="btn btn-success mx-3 mb-4 py-1 " href="/add-verb">Add new</a>
+    </div>
+    <div style="width: 100%;">
+        <table>
+            <thead>
+                <tr>
+                    <!-- <th><input type="checkbox" onClick="toggle(this)"></th> -->
+                    <th>Created</th>
+                    <th>English Verb</th>
+                    <th>Translation</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for verb in verbs %}
+                <tr>
+                    <td>{{ verb.date }}</td>
+                    <td>{{ verb.eng_verb_name }}</td>
+                    <td>{{ verb.translation }}</td>
+                    <td class="d-flex flex-row align-items-center justify-content-center">
+                        <a href="/verb-conjugated/{{ verb.translation }}" class="btn btn-primary mx-1">Conjugations</a>
+                        <a href="/edit-verb/{{ verb.translation }}" class="btn btn-secondary mx-1">Edit</a>
+                        <form action="{{ url_for('delete_verb', translation=verb.translation) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-danger mx-1">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </div>
+
+    {% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Phrase
+{% endblock %}
+
+{% block main%}
+    <h1>Add Phrase</h1>
+    <form class="d-flex flex-column align-items-center" action="/add-phrase" method="post">
+        <div class="m-2 edit-phrase">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto" id="phrase-name" name="phrase-name" placeholder="Add phrase" type="text">
+        </div>
+        <div class="m-2 edit-phrase">
+            <input required="required" autocomplete="off" autofocus class="form-control mx-auto" id="phrase-translation" name="phrase-translation" placeholder="Add translation" type="text">
+        </div>
+        <select class='form-select mx-auto mt-2 mb-4 edit-phrase' name="category-name" id="category-name" required>
+            <option label="Select Category Name" value=""></option>
+            {% for item in categories %}
+            <option value="{{item.category_name}}">{{ item.category_name }}</option>
+            {% endfor %}
+        </select>
+        <div class="d-flex">
+            <a href="/phrases" class="btn btn-danger mx-1">Cancel</a>
+            <button class="btn btn-success mx-1" type="submit">Add Phrase</button>
+        </div>
+    </form>
+
+{% endblock %}
