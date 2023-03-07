@@ -54,6 +54,7 @@ This project has helped me build the foundations for Python and SQLite and gave 
 I feel confident to continue expanding my knowledge and building on these foundations in these languages/frameworks.
 <br>
 <br>
-[Robert Garofalo](https://www.robertgarofalo.com)
+Robert Garofalo
+(https://www.robertgarofalo.com)
 <br>
 <br>
